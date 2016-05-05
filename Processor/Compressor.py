@@ -6,11 +6,12 @@ import os
 
 
 class Compressor:
-    __orig_content = []
-    __words = {}
+    _orig_content = []
+    _words = {}
 
     def __init__(self, content):
         __orig_content = content
+        self.__set_words()
 
     def __set_words(self):
         content = []
@@ -25,8 +26,26 @@ class Compressor:
             else:
                 self.__words[word]+=1
 
+
+class StatisticCompressor( Compressor):
+
+    def __init__(self, content):
+        super.__init__(self, content)
+
     def statist_compressor(self):
         pass
+
+class TableCompressor( Compressor):
+    __table = {}
+
+    def __init__(self, content):
+        super.__init__(self, content)
+        cont = 0
+        for word in self._words:
+            if word not in self.__table:
+                self.__table[word] = cont
+                cont+=1
+
 
 class CompressorBinaryTree:
     leftTree = None
