@@ -1,4 +1,4 @@
-import os
+import operator
 
 """
 "  Comprime e descomprime os documentos
@@ -31,6 +31,13 @@ class StatisticCompressor( Compressor):
 
     def __init__(self, content):
         super.__init__(self, content)
+        words = sorted(self._words.items(), key=operator.itemgetter(1), reverse=True)
+        self.__tree = CompressorBinaryTree
+        a = self.__tree
+        for word in words:
+            a.leftTree = word
+            a.rightTree = CompressorBinaryTree
+            a = a.rightTree
 
     def statist_compressor(self):
         pass
@@ -50,3 +57,4 @@ class TableCompressor( Compressor):
 class CompressorBinaryTree:
     leftTree = None
     rightTree = None
+    key = 0
