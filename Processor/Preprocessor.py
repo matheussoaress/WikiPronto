@@ -65,7 +65,7 @@ class Preprocessor:
         return data
 
     def __remove_stemming(self, data):
-        st = RSLPStemmer
+        st = RSLPStemmer()
         newData = []
         for word in data:
             if word is not "":
