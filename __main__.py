@@ -1,11 +1,22 @@
 from OsManager.FileManager import FileManager
-import Processor
+from Processor.Preprocessor import Preprocessor
+from Processor.HtmlContent import HtmlContent
+from Processor.Processor import Processor
+
 
 def main():
-    fm = FileManager('D:\Trabalhos Praticos\Recuperação de Informação\wikiSample')
-    files = fm.getFiles()
-    for file in files:
-        print(file)
+    fm = FileManager('D:\\Trabalhos_Praticos\\Recuperação de Informação\\wikiSample\\')
+    process = Processor()
+    content = fm.get_next_content_file()
+    while content is not None:
+        parser = HtmlContent()
+        parser.feed(data=content[1])
+        data = parser.content
+        preproc = Preprocessor(content=data)
+        process.indexer(content[0], preproc.get_words())
+        content = fm.get_next_content_file()
+    print(process.get_index())
+
 
 if __name__ == '__main__':
     main()
