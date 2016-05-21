@@ -22,7 +22,7 @@ class Preprocessor:
         words = {}
         c = 0
         for data in content:
-            #data = self.__data_encoder(data)
+            data = self.__data_encoder(data) if type(data) is bytes else data
             data = self.__lexan(data)
             if data != "":
                 all_words = data.split(" ")
@@ -42,7 +42,7 @@ class Preprocessor:
     " :return str
     """
     def __data_encoder(self, data):
-        data = data.encode(encoding='UTF-8',errors='strict')
+        #data = data.encode(encoding='UTF-8',errors='strict')
         return data.decode('utf-8', 'ignore')
 
     """
@@ -54,7 +54,7 @@ class Preprocessor:
     """
     def __lexan(self, data):
         trFrom = "ÁáÂâÀàÅåÃãÄäÆæÉéÊêÈèËëÐðÍíÎîÌìÏïÓóÔôÒòØøÕõÖöÚúÛûÙùÜüÇçÑñ®©ÝýÞþß'\"!@#$%¨&*()_+=-¹²³£¢¬§`{}^<>:?´[~],.;/ªº°\t\n|"
-        trTo = "AaAaAaAaAaAaEeEeEeEeEeEeIiIiIiIiOoOoOoOoOoOoUuUuUuUuCcNn_cYy__B________________123____________________aoo____"
+        trTo = "AaAaAaAaAaAaEeEeEeEeEeEeIiIiIiIiOoOoOoOoOoOoUuUuUuUuCcNn_cYy__B________________123____________________aoo___"
         trans = str.maketrans(trFrom, trTo)
         data = data.translate(trans)
         data = data.replace("_", "")
