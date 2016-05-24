@@ -1,6 +1,5 @@
 import json
-from urllib import request
-from urllib import parse
+import requests
 """
 "  Processamento de indexação das informações do documento
 "
@@ -45,12 +44,17 @@ class Processor:
     " :param str text
     """
     def translate_pt_en(self, text):
-        params = {"text": text, "options": 4}
-        query = parse.urlencode(params)
-        url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9fd6cc5c.573e055a.5ce35796-10-0&srv=tr-text&lang=pt-en&reason=auto"
-        req = request.build_opener()
-        req.add_header = [('User-agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36')]
-        site = req.open(url, query)
-        if site is not None and site.status == 200:
-            return json.loads(site.read())
-        return None
+        try:
+            if len(text) > 1:
+                params = {"text": text, "options": 4}
+                url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9fd6cc5c.573e055a.5ce35796-10-0&srv=tr-text&lang=pt-en&reason=auto"
+                r = requests.post(url, params)
+                if r is not None and r.status_code == 200:
+                    content = json.loads(r.text)
+                    content = content['text']
+                    return content[0]
+            if text is None:
+                text = ""
+            return text
+        except Exception as e:
+            print(repr(e))

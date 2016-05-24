@@ -94,3 +94,4 @@ class Preprocessor:
 
     def get_stem_words(self):
         return self.__stem_words
+

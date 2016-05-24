@@ -11,12 +11,14 @@ class FileManager:
         if root is not None:
             self.__root = root
             self.__getFilePath(root)
+        else:
+            self.__root = root=""
 
     def get_file(self, idx):
         try:
             content = None
             if len(self.__files) > idx:
-                if self.__files[idx].find('.pdf') == -1 and self.__files[idx].find('.jpg') == -1 and self.__files[idx].find('.png') == -1:
+                if self.__files[idx].find('.pdf') == -1 and self.__files[idx].find('.jpg') == -1 and self.__files[idx].find('.png') == -1 and self.__files[idx].find('.gif') == -1:
                     content = self.get_file_content(self.__files[idx])
                     return [self.__files[idx], content]
                 else:
