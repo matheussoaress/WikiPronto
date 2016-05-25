@@ -17,23 +17,26 @@ class Preprocessor:
     "  :return void
     """
     def __init__(self, content):
-        self.__content = content
+        try:
+            self.__content = content
 
-        words = {}
-        c = 0
-        for data in content:
-            #data = self.__data_encoder(data)
-            data = self.__lexan(data)
-            if data != "":
-                all_words = data.split(" ")
-                for word in all_words:
-                    if word != "":
-                        c += 1
-                        if word not in words:
-                            words[word] = []
-                        words[word].append(c)
-        self.__remove_stopwords(words)
-        self.__remove_stemming()
+            words = {}
+            c = 0
+            for data in content:
+                #data = self.__data_encoder(data)
+                data = self.__lexan(data)
+                if data != "":
+                    all_words = data.split(" ")
+                    for word in all_words:
+                        if word != "":
+                            c += 1
+                            if word not in words:
+                                words[word] = []
+                            words[word].append(c)
+            self.__remove_stopwords(words)
+            self.__remove_stemming()
+        except Exception as e:
+            print(repr(e))
 
 
     """
@@ -42,8 +45,11 @@ class Preprocessor:
     " :return str
     """
     def __data_encoder(self, data):
-        data = data.encode(encoding='UTF-8',errors='strict')
-        return data.decode('utf-8', 'ignore')
+        try:
+            #data = data.encode(encoding='UTF-8',errors='strict')
+            return data.decode(encoding='UTF-8',errors='strict') if type(data) is bytes else data
+        except Exception as e:
+            print(repr(e))
 
     """
     "  Desabilita caixa alta de todas as palavras.
@@ -53,12 +59,15 @@ class Preprocessor:
     "  :return str
     """
     def __lexan(self, data):
-        trFrom = "ÁáÂâÀàÅåÃãÄäÆæÉéÊêÈèËëÐðÍíÎîÌìÏïÓóÔôÒòØøÕõÖöÚúÛûÙùÜüÇçÑñ®©ÝýÞþß'\"!@#$%¨&*()_+=-¹²³£¢¬§`{}^<>:?´[~],.;/ªº°\t\n|"
-        trTo = "AaAaAaAaAaAaEeEeEeEeEeEeIiIiIiIiOoOoOoOoOoOoUuUuUuUuCcNn_cYy__B________________123____________________aoo____"
-        trans = str.maketrans(trFrom, trTo)
-        data = data.translate(trans)
-        data = data.replace("_", "")
-        return data.lower()
+        try:
+            trFrom = "ÁáÂâÀàÅåÃãÄäÆæÉéÊêÈèËëÐðÍíÎîÌìÏïÓóÔôÒòØøÕõÖöÚúÛûÙùÜüÇçÑñ®©ÝýÞþß'\"!@#$%¨&*()_+=-¹²³£¢¬§`{}^<>:?´[~],.;/ªº°\t\n|"
+            trTo = "AaAaAaAaAaAaEeEeEeEeEeEeIiIiIiIiOoOoOoOoOoOoUuUuUuUuCcNn_cYy__B________________123____________________aoo___"
+            trans = str.maketrans(trFrom, trTo)
+            data = data.translate(trans)
+            data = data.replace("_", "")
+            return data.lower()
+        except Exception as e:
+            print(repr(e))
 
     """
     "  Remove as Stop Words do texto
@@ -66,13 +75,16 @@ class Preprocessor:
     "  :return None
     """
     def __remove_stopwords(self, data):
-        info = data.copy()
-        for word in data:
-            if word in self.__stopwords:
-                info.pop(word)
-        if "" in info:
-            info.pop("")
-        self.__words = info
+        try:
+            info = data.copy()
+            for word in data:
+                if word in self.__stopwords:
+                    info.pop(word)
+            if "" in info:
+                info.pop("")
+            self.__words = info
+        except Exception as e:
+            print(repr(e))
 
     """
     " Remove as stemming das palavras
@@ -80,14 +92,16 @@ class Preprocessor:
     " :return None
     """
     def __remove_stemming(self):
-        #st = RSLPStemmer()
-        stemmer = nltk.stem.RSLPStemmer()
-        stem_words = {}
-        for word in self.__words:
-            stem_word = stemmer.stem(word)
-            if stem_word not in stem_words:
-                stem_words[stem_word] = self.__words[word]
-        self.__stem_words = stem_words
+        try:
+            stemmer = nltk.stem.RSLPStemmer()
+            stem_words = {}
+            for word in self.__words:
+                stem_word = stemmer.stem(word)
+                if stem_word not in stem_words:
+                    stem_words[stem_word] = self.__words[word]
+            self.__stem_words = stem_words
+        except Exception as e:
+            print(repr(e))
 
     def get_words(self):
         return self.__words

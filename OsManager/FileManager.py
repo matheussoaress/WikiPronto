@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 
 
@@ -13,10 +14,21 @@ class FileManager:
         try:
             content = None
             if len(self.__files) > idx:
-                with open(self.__files[idx]) as fp:
-                    content = fp.read()
-                    fp.close()
-                return [self.__names[idx], content]
+                now = datetime.now()
+                print(str(now.day)+"/"+str(now.month)+"/"+str(now.year)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)+"\tLendo arquivo: "+self.__files[idx])
+                try:
+                    with open(self.__files[idx], 'r') as fp:
+                        content = fp.read()
+                        fp.close()
+                    return [self.__names[idx], content]
+                except Exception as e:
+                    try:
+                        with open(self.__files[idx], 'rb') as fp:
+                            content = fp.read()
+                            fp.close()
+                        return [self.__names[idx], content.decode()]
+                    except Exception as e:
+                        raise e
             else:
                 return None
         except Exception as e:
@@ -34,6 +46,8 @@ class FileManager:
 
     def __getFilePath(self, root):
         try:
+            now = datetime.now()
+            print(str(now.day)+"/"+str(now.month)+"/"+str(now.year)+" "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)+"\tLendo pasta: "+root)
             paths = os.listdir(root)
             for path in paths:
                 aux = root+os.sep+path
