@@ -6,7 +6,8 @@ from Processor.Processor import Processor
 
 def main():
     try:
-        fm = FileManager('D:\\Trabalhos_Praticos\\Recuperação de Informação\\wikiSample\\')
+        path = 'D:\\Trabalhos_Praticos\\Recuperação de Informação\\wikiSample\\'
+        fm = FileManager(path)
         process = Processor()
         content = fm.get_next_content_file()
         while content is not None:
@@ -16,7 +17,7 @@ def main():
             preproc = Preprocessor(content=data)
             process.indexer(content[0], preproc.get_words())
             content = fm.get_next_content_file()
-        print(process.get_index())
+        fm.save_json_result(path, process.get_index())
     except Exception as e:
         print(repr(e))
 

@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 import os
 
@@ -62,3 +63,13 @@ class FileManager:
 
     def getFiles(self):
         return self.__files
+
+    def save_json_result(self, path, data):
+        try:
+            data = json.dumps(data)
+            path += os.sep+'result.json'
+            with open(path, 'w') as fp:
+                fp.write(data)
+                fp.close()
+        except Exception as e:
+            print(repr(e))
